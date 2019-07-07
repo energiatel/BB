@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#TODO
+# - Implementare altdns come in subdomain.sh originale
+
 amass()
 {
 	echo "Amass scan on domain $1"

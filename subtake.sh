@@ -27,8 +27,8 @@ do
 		do
 			path=$(echo $domain_list_cleaned | cut -f1-6 -d'/')
 			
-			#subjack $path $domain_list			
-			#log "Subjack executed on domain $(echo $domain_list_cleaned | cut -f6 -d'/')" "$(echo $domain_list_cleaned | cut -f1-4 -d'/')/logs/log"
+			subjack $path $domain_list			
+			log "Subjack executed on domain $(echo $domain_list_cleaned | cut -f6 -d'/')" "$(echo $domain_list_cleaned | cut -f1-4 -d'/')/logs/log"
 
 			
 			if [ -s "$path/results_subjack_ssl.txt" ]
