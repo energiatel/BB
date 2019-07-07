@@ -43,5 +43,3 @@ do
 	done
 	echo '1' > "$PROJECT_DIR/$project/takeover/status"
 done
-
-#TODO usare lo status per non ripetere la ricerca
