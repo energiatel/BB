@@ -1,2 +1,3 @@
 - Eliminare domini pubblicati da domain clean all
 - Resettare lo status
+- Come in questa immagine https://miro.medium.com/max/700/0*SDuUEvOElYt60pR2.jpg, dai subdomain fare ipresolver, trovare ip, fare massscan e vedere porte aperte per trovare servizi (es tomcat, jenkins ecc) magari con credenziali di default 
