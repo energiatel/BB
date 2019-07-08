@@ -5,3 +5,6 @@
 - Impostare cron su nfs che scarica nuova versione di FDNS
 - a8c06aab5392e76f557e85878be44d54be82d432
 - Skippare un progetto dal takover (es alibaba)
+
+- Eliminare tutti i dork che contengono site
+- Con meg si possono rilevare tutte le ricerche google dork che non contengono risultati e tenere solo quelle buone? magari filtrando con "non ha prodotto risultati in nessun documento" e "Risultati per ... (senza virgolette):"
