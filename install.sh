@@ -98,3 +98,8 @@ docker build --build-arg user=$USER --tag eyewitness https://github.com/FortyNor
 echo "[+] Install SubJack"
 docker build -t subjack https://github.com/janmasarik/subjack.git
 
+#Installo github-dork
+#https://github.com/energiatel/github-dorks-docker/tree/master
+#https://github.com/techgaun/github-dorks
+echo "[+] Install github-dork"
+docker build -t githubdorks https://github.com/energiatel/github-dorks-docker.git
