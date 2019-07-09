@@ -46,19 +46,10 @@ massdns()
 }
 altdns()
 {
-	#now=$(date +"%Y_%m_%d")
+	echo "Altdns on $1/all_domains_clean_$now"
 	now=$(date +"%Y_%m")
-	echo "Check list for wildcard"
-	for dom in $(cat $1/all_domains_$now)
-	do
-		if [[ "$(dig @1.1.1.1 {test321123,testingforwildcard,plsdontgimmearesult}.$dom A,CNAME +short | wc -l)" -gt "1" ]]; 
-		then
-			echo "Wildcard in $dom"
-		else
-			echo "No wildcard in $dom"
-			echo $dom >> $1/altdns_$now
-		fi
-	done
+	cp $1/all_domains_clean_$now $1/altdns_$now
+	
 	echo "Altdns on all_domains_now"
 	
 	docker run -t -v $1:/tmp/altdns altdns -i /tmp/altdns/altdns_$now  -o /tmp/altdns/altdns_results_$now -w /altdns/words.txt # -r -s /tmp/altdns/results_output.txt
@@ -66,31 +57,27 @@ altdns()
 }
 massdns_post_altdns()
 {
-	echo "Massdns on altdns"
-	#now=$(date +"%Y_%m_%d")
+	echo "--- Massdns on altdns ---"
 	now=$(date +"%Y_%m")
-	if [ $(wc -l $1/altdns_results_$now) -gt 0 ]
+	altdns_results_size=$(wc -l "$1/altdns_results_$now" | cut -f1 -d' ')
+	if [ $altdns_results_size -gt 0 ]
 	then
-		docker run -ti --rm -v /root/common_files:/common_files -v $1:/subdomains massdns -r /common_files/nameservers_ipv4.txt -w /subdomains/semifinal_results.txt -t A /subdomains/altdns_results_$now -o S --flush -s 15000 --verify-ip
+		docker run -ti --rm -v /root/common_files:/common_files -v $1:/subdomains massdns -r /common_files/nameservers_ipv4.txt -w /subdomains/altdns_semifinal_results.txt -t A /subdomains/altdns_results_$now -o S --flush -s 15000 --verify-ip
 		rm -f $1/altdns_results_$now
-		rm -f $1/all_domains_$now
-		cat $1/semifinal_results.txt | cut -f1 -d' ' | rev | cut -c 2- | rev > $1/all_domains_$now
-		rm -f $1/semifinal_results.txt
-		docker run -ti --rm -v /root/common_files:/common_files -v $1:/subdomains massdns -r /common_files/nameservers_google_cloudflare.txt -w /subdomains/final_results.txt -t A /subdomains/all_domains_$now -o S --flush -s 15000 --verify-ip
+		cat $1/altdns_semifinal_results.txt | cut -f1 -d' ' | rev | cut -c 2- | rev > $1/altdns_results_$now
+		rm -f $1/altdns_semifinal_results.txt
+		altdns_results_size=$(wc -l "$1/altdns_results_$now" | cut -f1 -d' ')
+		if [ $altdns_results_size -gt 0 ]
+		then
+			docker run -ti --rm -v /root/common_files:/common_files -v $1:/subdomains massdns -r /common_files/nameservers_google_cloudflare.txt -w /subdomains/altdns_final_results.txt -t A /subdomains/altdns_results_$now -o S --flush -s 15000 --verify-ip
+			rm -f $1/altdns_results_$now
+			mv $1/altdns_final_results.txt $1/altdns_results_$now
+		else
+			echo "Empty $1/altdns_results_$now"
+		fi
 	else
-		touch $1/final_results.txt
+		echo "Empty $1/altdns_results_$now"
 	fi
-	rm -f $1/all_domains_$now
-	cat $1/final_results.txt | cut -f1 -d' ' | rev | cut -c 2- | rev > $1/all_domains_$now
-	rm -f $1/final_results.txt
-	mv $1/all_domains_$now $1/all_domains_tmp_$now
-	cat $1/all_domains_no_altdns_$now >> $1/all_domains_$now
-	cat $1/all_domains_tmp_$now >> $1/all_domains_$now
-	rm -f $1/all_domains_no_altdns_$now
-	rm -f $1/all_domains_tmp_$now
-	mv $1/all_domains_$now $1/all_domains_tmp_$now
-	cat $1/all_domains_tmp_$now | uniq > $1/all_domains_$now
-	rm -f $1/all_domains_tmp_$now
 }
 
 log()
@@ -98,11 +85,6 @@ log()
 	dt=$(date '+%d/%m/%Y %H:%M:%S');
 	echo "[$dt] $1" >> "$2"
 	echo "[$dt] $1"
-}
-
-erase_logs()
-{
-	echo "" > $1
 }
 
 PROJECT_DIR="/root/projects"
@@ -137,19 +119,18 @@ do
 				fdns $domain | grep -v "FDNS scan on"  >> "$PROJECT_DIR/$project/subdomains/$domain/fdns_$now"
 				results_number=$(wc -l $PROJECT_DIR/$project/subdomains/$domain/fdns_$now | cut -f1 -d' ')
 				log "FDNS finished on $domain with $results_number results" "$PROJECT_DIR/$project/logs/log"
+				cat "$PROJECT_DIR/$project/subdomains/$domain/fdns_$now" >> "$PROJECT_DIR/$project/subdomains/$domain/all_domains_clean_$now" #&& rm -f "$PROJECT_DIR/$project/subdomains/$domain/fdns_$now"
 				
 				log "Amass start on $domain" "$PROJECT_DIR/$project/logs/log"
 				amass $domain | grep -v "Amass scan on domain" | grep -v "OWASP Amass" | grep -v "names discovered" >> "$PROJECT_DIR/$project/subdomains/$domain/amass_$now"
 				results_number=$(wc -l $PROJECT_DIR/$project/subdomains/$domain/amass_$now | cut -f1 -d' ')
 				log "Amass finished on $domain with $results_number results" "$PROJECT_DIR/$project/logs/log"
-				
+				cat "$PROJECT_DIR/$project/subdomains/$domain/amass_$now" >> "$PROJECT_DIR/$project/subdomains/$domain/all_domains_clean_$now" #&& rm -f "$PROJECT_DIR/$project/subdomains/$domain/amass_$now"
+
 				log "Commonspeak2 start on $domain" "$PROJECT_DIR/$project/logs/log"
 				commonspeak2 $domain | grep -v "scan on domain" >> "$PROJECT_DIR/$project/subdomains/$domain/commonspeak2_$now"
 				results_number=$(wc -l $PROJECT_DIR/$project/subdomains/$domain/commonspeak2_$now | cut -f1 -d' ')
 				log "Commonspeak2 finished on $domain with $results_number results" "$PROJECT_DIR/$project/logs/log"
-				
-				cat "$PROJECT_DIR/$project/subdomains/$domain/fdns_$now" >> "$PROJECT_DIR/$project/subdomains/$domain/all_domains_clean_$now" #&& rm -f "$PROJECT_DIR/$project/subdomains/$domain/fdns_$now"
-				cat "$PROJECT_DIR/$project/subdomains/$domain/amass_$now" >> "$PROJECT_DIR/$project/subdomains/$domain/all_domains_clean_$now" #&& rm -f "$PROJECT_DIR/$project/subdomains/$domain/amass_$now"
 				cat "$PROJECT_DIR/$project/subdomains/$domain/commonspeak2_$now" >> "$PROJECT_DIR/$project/subdomains/$domain/all_domains_clean_$now" #&& rm -f "$PROJECT_DIR/$project/subdomains/$domain/commonspeak2_$now"
 
 				log "Massdns start on $domain" "$PROJECT_DIR/$project/logs/log"
@@ -157,13 +138,34 @@ do
 				results_number=$(wc -l $PROJECT_DIR/$project/subdomains/$domain/all_domains_clean_$now | cut -f1 -d' ')
 				log "Massdns finished on $domain with $results_number results" "$PROJECT_DIR/$project/logs/log"
 				
-				#log "Altdns start on $domain" "$PROJECT_DIR/$project/logs/log"
-				#altdns "$PROJECT_DIR/$project/subdomains/$domain/"
-				#log "Altdns finished on $domain" "$PROJECT_DIR/$project/logs/log"
+				echo "stop1"
+				read stop1
+				
+				log "Altdns start on $domain" "$PROJECT_DIR/$project/logs/log"
+				altdns "$PROJECT_DIR/$project/subdomains/$domain/"
+				log "Altdns finished on $domain" "$PROJECT_DIR/$project/logs/log"
+				
+				echo "stop2"
+				read stop2
+				
+				log "Massdns_post_altdns start on $domain" "$PROJECT_DIR/$project/logs/log"
+				massdns_post_altdns "$PROJECT_DIR/$project/subdomains/$domain/"
+				log "Massdns_post_altdns finished on $domain" "$PROJECT_DIR/$project/logs/log"
+				
+				echo "stop3"
+				read stop3
+				
+				cat "$PROJECT_DIR/$project/subdomains/$domain/altdns_results_$now" >> "$PROJECT_DIR/$project/subdomains/$domain/all_domains_clean_$now"
+				
+				echo "stop4"
+				read stop4
+				
+				sort "$PROJECT_DIR/$project/subdomains/$domain/all_domains_clean_$now" | uniq -u > "$PROJECT_DIR/$project/subdomains/$domain/all_domains_clean_$now_tmp"
+				rm -f "$PROJECT_DIR/$project/subdomains/$domain/all_domains_clean_$now"
+				mv "$PROJECT_DIR/$project/subdomains/$domain/all_domains_clean_$now_tmp" "$PROJECT_DIR/$project/subdomains/$domain/all_domains_clean_$now"
 			fi
 			
 			log "Finished subdomain for domain $domain" "$PROJECT_DIR/$project/logs/log"
-			#erase_logs "$PROJECT_DIR/$project/logs/log"
 			
 		done
 	fi
