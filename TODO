@@ -1,4 +1,4 @@
-- Eliminare domini pubblicati da domain clean all
+- Eliminare domini duplicati da domain clean all
 - Resettare lo status
 - Come in questa immagine https://miro.medium.com/max/700/0*SDuUEvOElYt60pR2.jpg, dai subdomain fare ipresolver, trovare ip, fare massscan e vedere porte aperte per trovare servizi (es tomcat, jenkins ecc) magari con credenziali di default 
 - Modificare install.sh in modo che scarichi i file di configurazione direttamente dal repo su github invece che da nfs
@@ -7,4 +7,6 @@
 - Skippare un progetto dal takover (es alibaba)
 
 - Eliminare tutti i dork che contengono site
-- Con meg si possono rilevare tutte le ricerche google dork che non contengono risultati e tenere solo quelle buone? magari filtrando con "non ha prodotto risultati in nessun documento" e "Risultati per ... (senza virgolette):"
+- Con meg (o wget?) si possono rilevare tutte le ricerche google dork che non contengono risultati e tenere solo quelle buone? magari filtrando con "non ha prodotto risultati in nessun documento" e "Risultati per ... (senza virgolette):"
+- Loggare gli errori di install.sh da qualche parte in modo da sapere quando un'installazione non va a buon fine
+- Verifica che subtake funzioni davvero e non semini file a caso
