@@ -57,7 +57,6 @@ altdns()
 massdns_post_altdns()
 {
 	echo "Massdns on altdns"
-	#now=$(date +"%Y_%m_%d")
 	now=$(date +"%Y_%m")
 	if [ $(wc -l $1/altdns_results_$now) -gt 0 ]
 	then
