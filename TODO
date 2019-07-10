@@ -10,3 +10,4 @@
 - Con meg (o wget?) si possono rilevare tutte le ricerche google dork che non contengono risultati e tenere solo quelle buone? magari filtrando con "non ha prodotto risultati in nessun documento" e "Risultati per ... (senza virgolette):"
 - Loggare gli errori di install.sh da qualche parte in modo da sapere quando un'installazione non va a buon fine
 - Verifica che subtake funzioni davvero e non semini file a caso
+- SCARICARE DA GITHUB I FILE AGGIORNATI SH b.sh takeover.sh ecc IN SCRIPT install.sh

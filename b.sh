@@ -138,27 +138,15 @@ do
 				results_number=$(wc -l $PROJECT_DIR/$project/subdomains/$domain/all_domains_clean_$now | cut -f1 -d' ')
 				log "Massdns finished on $domain with $results_number results" "$PROJECT_DIR/$project/logs/log"
 				
-				echo "stop1"
-				read stop1
-				
 				log "Altdns start on $domain" "$PROJECT_DIR/$project/logs/log"
 				altdns "$PROJECT_DIR/$project/subdomains/$domain/"
 				log "Altdns finished on $domain" "$PROJECT_DIR/$project/logs/log"
-				
-				echo "stop2"
-				read stop2
 				
 				log "Massdns_post_altdns start on $domain" "$PROJECT_DIR/$project/logs/log"
 				massdns_post_altdns "$PROJECT_DIR/$project/subdomains/$domain/"
 				log "Massdns_post_altdns finished on $domain" "$PROJECT_DIR/$project/logs/log"
 				
-				echo "stop3"
-				read stop3
-				
 				cat "$PROJECT_DIR/$project/subdomains/$domain/altdns_results_$now" >> "$PROJECT_DIR/$project/subdomains/$domain/all_domains_clean_$now"
-				
-				echo "stop4"
-				read stop4
 				
 				sort "$PROJECT_DIR/$project/subdomains/$domain/all_domains_clean_$now" | uniq -u > "$PROJECT_DIR/$project/subdomains/$domain/all_domains_clean_$now_tmp"
 				rm -f "$PROJECT_DIR/$project/subdomains/$domain/all_domains_clean_$now"
