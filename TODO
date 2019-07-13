@@ -1,5 +1,4 @@
-- Eliminare domini duplicati da domain clean all
-- Resettare lo status
+- Decomprimere su nfs i file FDNS per rendere immensamente più veloce la funzione fdns
 - Come in questa immagine https://miro.medium.com/max/700/0*SDuUEvOElYt60pR2.jpg, dai subdomain fare ipresolver, trovare ip, fare massscan e vedere porte aperte per trovare servizi (es tomcat, jenkins ecc) magari con credenziali di default 
 - Modificare install.sh in modo che scarichi i file di configurazione direttamente dal repo su github invece che da nfs
 - Impostare cron su nfs che scarica nuova versione di FDNS
