@@ -108,4 +108,4 @@ docker build -t githubdorks https://github.com/energiatel/github-dorks-docker.gi
 #https://github.com/tomnomnom/meg
 #https://github.com/energiatel/meg
 echo "[+] Install meg"
-docker build -t meg https://github.com/energiatel/meg
+docker build -t meg https://github.com/energiatel/meg.git
