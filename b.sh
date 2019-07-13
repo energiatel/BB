@@ -46,11 +46,9 @@ massdns()
 }
 altdns()
 {
-	echo "Altdns on $1/all_domains_clean_$now"
+	echo "Altdns on all_domains_clean_$now"
 	now=$(date +"%Y_%m")
 	cp $1/all_domains_clean_$now $1/altdns_$now
-	
-	echo "Altdns on all_domains_now"
 	
 	docker run -t -v $1:/tmp/altdns altdns -i /tmp/altdns/altdns_$now  -o /tmp/altdns/altdns_results_$now -w /altdns/words.txt # -r -s /tmp/altdns/results_output.txt
 	rm -f $1/altdns_$now
