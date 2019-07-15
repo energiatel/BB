@@ -7,6 +7,9 @@ takeover()
 		echo "$1 $(du -sh $1)"
 		cat "$1"
 		printf "\n"
+	else
+		echo "$1 is empty"
+		rm -f $1
 	fi
 }
 
