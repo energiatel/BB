@@ -4,7 +4,7 @@ takeover()
 {
 	if [ -s "$1" ]
 	then
-		echo "$1"
+		echo "$1 $(du -sh $1)"
 		cat "$1"
 		printf "\n"
 	fi
