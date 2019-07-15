@@ -36,4 +36,27 @@ trello()
 	echo "trello"
 }
 
-google_dorks_file_containing_juicy_info $1
+
+
+PROJECT_DIR="/root/projects"
+
+project_list=$(ls $PROJECT_DIR)
+now=$(date +"%Y_%m")
+
+MINWAIT=30
+MAXWAIT=180
+
+for project in $project_list
+do
+	for domain in $(ls "$PROJECT_DIR/$project/subdomains" | grep -v status)
+	do
+		dork_dir=$PROJECT_DIR/$project/dorks
+		mkdir -p $dork_dir
+		echo $domain
+		
+		echo "https://www.google.com" > $dork_dir/hosts
+		google_dorks_file_containing_juicy_info $domain >> $dork_dir/paths
+		sed -i -e 's/ /%20/g' $dork_dir/paths
+		sort -u $dork_dir/paths > $dork_dir/dorks
+	done
+done
