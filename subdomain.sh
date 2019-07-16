@@ -146,6 +146,9 @@ do
 				log "Massdns_post_altdns finished on $domain" "$PROJECT_DIR/$project/logs/log"
 				
 				cat "$PROJECT_DIR/$project/subdomains/all_domains_$now" >> "$PROJECT_DIR/$project/subdomains/all_domains_done_$now"
+				
+				echo $domain >> "$PROJECT_DIR/$project/subdomains/all_domains_done_$now"
+				
 				log "Subdomain $domain scan finished" "$PROJECT_DIR/$project/logs/log"
 			fi
 		done
