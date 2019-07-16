@@ -9,7 +9,7 @@ takeover()
 		printf "\n"
 	else
 		echo "$1 is empty"
-		rm -f $1
+		#rm -f $1
 	fi
 }
 
