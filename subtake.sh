@@ -33,11 +33,11 @@ do
 			
 			if [ -s "$path/results_subjack_ssl.txt" ]
 			then
-				cat "$path/results_subjack_ssl.txt" | grep -v '[Not Vulnerable]' | grep -v 'DEAD DOMAIN' > "$PROJECT_DIR/$project/takeover/takeover_results_$now"
+				cat "$path/results_subjack_ssl.txt" | grep -v 'Not Vulnerable' | grep -v 'DEAD DOMAIN' > "$PROJECT_DIR/$project/takeover/takeover_results_$now"
 			fi
 			if [ -s "$path/results_subjack_nossl.txt" ]
 			then
-				cat "$path/results_subjack_nossl.txt" | grep -v '[Not Vulnerable]' | grep -v 'DEAD DOMAIN' >> "$PROJECT_DIR/$project/takeover/takeover_results_$now"
+				cat "$path/results_subjack_nossl.txt" | grep -v 'Not Vulnerable' | grep -v 'DEAD DOMAIN' >> "$PROJECT_DIR/$project/takeover/takeover_results_$now"
 			fi
 		done
 	done
