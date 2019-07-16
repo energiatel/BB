@@ -2,7 +2,7 @@
 
 meg()
 {
-	docker run -v $1:/data/ meg --verbose -s 200 /data/paths /data/hosts
+	docker run -v $1:/data/ meg --verbose -s 200 -c 50 /data/paths /data/hosts
 }
 
 PROJECT_DIR="/root/projects"
