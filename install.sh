@@ -48,9 +48,9 @@ echo "[+] Sia per record A che AAAA"
 echo "[+] https://opendata.rapid7.com/sonar.fdns_v2/"
 echo "[+] Download FDNS files"
 mkdir /root/fdns/
-#wget https://opendata.rapid7.com/sonar.fdns_v2/2019-05-26-1558831458-fdns_a.json.gz -O /root/fdns/record_a.gz
+#wget https://opendata.rapid7.com/sonar.fdns_v2/2019-06-21-1561075509-fdns_a.json.gz -O /root/fdns/record_a.gz
 cp /mnt/nfs/var/nfsshare/record_a.gz /root/fdns/record_a.gz &
-#wget https://opendata.rapid7.com/sonar.fdns_v2/2019-05-24-1558737480-fdns_aaaa.json.gz  -O /root/fdns/record_aaaa.gz
+#wget https://opendata.rapid7.com/sonar.fdns_v2/2019-06-21-1561075595-fdns_aaaa.json.gz  -O /root/fdns/record_aaaa.gz
 cp /mnt/nfs/var/nfsshare/record_aaaa.gz /root/fdns/record_aaaa.gz &
 
 #Scarico JQ
