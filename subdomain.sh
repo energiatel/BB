@@ -88,6 +88,10 @@ log()
 	echo "$dt $1" >> $2
 }
 
+mount -t nfs 192.168.1.201:/var/nfsshare /mnt/nfs/var/nfsshare/
+cp /mnt/nfs/var/nfsshare/record_a.gz /root/fdns/record_a.gz
+cp /mnt/nfs/var/nfsshare/record_aaaa.gz /root/fdns/record_aaaa.gz
+
 PROJECT_DIR="/root/projects"
 
 project_list=$(ls $PROJECT_DIR)
